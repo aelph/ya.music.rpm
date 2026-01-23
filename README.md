@@ -1,29 +1,29 @@
 # Yandex Music RPM Workaround for Fedora/openSUSE
 
-Этот репозиторий содержит инструменты для адаптации официального `.deb` пакета Яндекс Музыки для использования в RPM-дистрибутивах (Fedora, openSUSE).
+This repository contains tools for adapting the official Yandex Music `.deb` package to RPM-based distributions (Fedora, openSUSE).
 
-## Особенности сборки
+## Build Features
 
-- **Hi-Res Audio:** Подтверждена стабильная работа на частотах до **176,4 кГц** через ALSA.
-- **Bluetooth:** Оптимизировано для работы с кодеком LDAC (проверено на Sony WH-XB900N, 88.2 кГц).
-- **Название пакета** Alien автоматически инкрементирует версию пакета для корректной работы пакетного менеджера. Вы получите надпись Beta, там где в приложении указывается номер сборки.
-- **Интеграция:** Исправлены категории меню (теперь отображается в разделе "Музыка") и исправлено отображение иконок в панели задач (StartupWMClass). Эти изменения только в ярлыке приложения. Сам исходный код не изменялся.
+- **Hi-Res Audio:** Stable operation confirmed up to **176.4 kHz** via ALSA.
+- **Bluetooth:** Optimized for LDAC codec (tested on Sony WH-XB900N, 88.2 kHz).
+- **Package Name:** Alien automatically increments the package version for correct package manager behavior. You'll see "Beta" where the app shows the build number.
+- **Integration:** Menu categories fixed (now shown under "Music") and taskbar icon display fixed (StartupWMClass). These changes are only in the app launcher. The source code is not modified.
 
-## Как использовать
+## How to Use
 
-1. Склонируйте репозиторий.
-2. Установите зависимости: `sudo dnf install alien curl`.
-3. Запустите скрипт сборки: `./build_rpm.sh`.
-4. Установите полученный пакет: `sudo dnf install ./*.rpm`.
+1. Clone the repository.
+2. Install dependencies: `sudo dnf install alien curl`.
+3. Run the build script: `./build_rpm.sh`.
+4. Install the resulting package: `sudo dnf install ./*.rpm`.
 
-## Почему не готовый RPM?
+## Why Not a Prebuilt RPM?
 
-Чтобы не нарушать лицензионные права правообладателя, в этом репозитории бинарный файл приведён только в качестве примера успешной работы скрипта.
+To avoid violating the rights of the license holder, the binary in this repository is included only as an example of a successful script run.
 
-Скрипт только автоматизирует процесс конвертации официального пакета, предоставленного Яндексом, для вашей локальной системы. 
+The script only automates the conversion of the official package provided by Yandex for your local system.
 
-Никаких изменений в исходный код не вносится, производится только пересборка пакета с использованием инструмента alien.
+No changes are made to the source code; only a repackaging is performed using the alien tool.
 
-## Решение проблем со звуком
+## Audio Troubleshooting
 
-Если у вас возникают прерывания на Bluetooth-наушниках, рекомендуется использовать кратную частоту дискретизации (например, 88.2 кГц для исходника 176.4 кГц).
+If you experience dropouts on Bluetooth headphones, it is recommended to use a sample rate that is a multiple of the source rate (for example, 88.2 kHz for a 176.4 kHz source).
