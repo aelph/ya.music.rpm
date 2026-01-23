@@ -13,7 +13,10 @@ This repository contains tools for adapting the official Yandex Music `.deb` pac
 
 1. Clone the repository.
 2. Install dependencies: `sudo dnf install alien curl`.
-3. Run the build script: `./build_rpm.sh`.
+3. Run the build script:
+   - `sudo ./build_rpm.sh`
+   - `fakeroot ./build_rpm.sh` (Safe)
+   - `./build_rpm.sh` (Undesirable)
 4. Install the resulting package: `sudo dnf install ./*.rpm`.
 
 ## Why Not a Prebuilt RPM?
