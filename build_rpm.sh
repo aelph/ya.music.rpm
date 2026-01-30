@@ -20,11 +20,11 @@ fi
 # 2. Конвертация
 # Alien сам добавит единицу к версии и сменит расширение на .rpm и изменит имя пакета
 echo "Конвертация через Alien..."
-alien -r --scripts "$PACKAGE_NAME"
+alien --to-rpm --scripts "$PACKAGE_NAME"
 
 # 3. Подготовка ярлыка (StartupWMClass и категории)
 echo "Создание исправленного ярлыка..."
-cat <<EOF > yandex-music.desktop
+cat <<EOF > yandexmusic.desktop
 [Desktop Entry]
 Name=Яндекс Музыка
 Name[ru]=Яндекс Музыка

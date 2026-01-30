@@ -27,6 +27,20 @@ The script only automates the conversion of the official package provided by Yan
 
 No changes are made to the source code; only a repackaging is performed using the alien tool.
 
+## Update
+
+By script or manually:
+
+``sh
+sudo dnf install./path to the new package.rpm
+```
+
+After the manual update, you need to edit the shortcut:
+
+```sh
+sudo cp ./yandexmusic.desktop /usr/share/applications/
+```
+
 ## Audio Troubleshooting
 
 If you experience dropouts on Bluetooth headphones, it is recommended to use a sample rate that is a multiple of the source rate (for example, 88.2 kHz for a 176.4 kHz source).
