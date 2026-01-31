@@ -1,6 +1,6 @@
 # Yandex Music RPM Workaround for Fedora/openSUSE
 
-This repository contains tools for adapting the official Yandex Music `.deb` package to RPM-based distributions (Fedora, openSUSE).
+This repository contains a tool for adapting the official Yandex Music `.deb` package to RPM-based distributions (Fedora, openSUSE).
 
 ## Build Features
 
@@ -12,12 +12,10 @@ This repository contains tools for adapting the official Yandex Music `.deb` pac
 ## How to Use
 
 1. Clone the repository.
-2. Install dependencies: `sudo dnf install alien curl`.
-3. Run the build script:
-   - `sudo ./build_rpm.sh`
-   - `fakeroot ./build_rpm.sh` (Safe)
-   - `./build_rpm.sh` (Undesirable)
-4. Install the resulting package: `sudo dnf install ./*.rpm`.
+2. Install dependencies: `sudo dnf install alien curl desktop-file-utils`.
+3. Run the build script with root privileges: `sudo ./build_rpm.sh`.
+
+The script will automatically download the latest version, convert it to RPM, install it, and apply the necessary fixes for the application shortcut.
 
 ## Why Not a Prebuilt RPM?
 
@@ -29,17 +27,7 @@ No changes are made to the source code; only a repackaging is performed using th
 
 ## Update
 
-By script or manually:
-
-``sh
-sudo dnf install./path to the new package.rpm
-```
-
-After the manual update, you need to edit the shortcut:
-
-```sh
-sudo cp ./yandexmusic.desktop /usr/share/applications/
-```
+To update the application, simply run the script again: `sudo ./build_rpm.sh`.
 
 ## Audio Troubleshooting
 
