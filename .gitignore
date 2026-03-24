@@ -9,6 +9,7 @@ ehthumbs.db
 # Package / build
 dist/
 build/
+yandexmusic*/
 *.egg-info/
 *.egg
 *.deb
