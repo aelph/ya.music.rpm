@@ -13,22 +13,26 @@ This repository contains a tool for adapting the official Yandex Music `.deb` pa
 
 1. Clone the repository.
 2. Install dependencies: `sudo dnf install alien curl desktop-file-utils`.
-3. Run the build script as a regular user: `./build_rpm.sh`.
+3. Build the RPM as a regular user: `./build_rpm.sh`.
+4. Install the resulting RPM with your system's regular package tools, or use `./install_rpm.sh` if you want a guided install/check flow.
 
-The script runs most steps as your regular user and will use `sudo` only for the privileged operations (installing the RPM and updating the desktop file database). When needed, it will request your `sudo` password once at the start and cache credentials briefly, so you won't be prompted at every privileged command.
+`build_rpm.sh` is a simple builder. It only downloads the `.deb`, patches the launcher in the Alien build tree, and builds the RPM. It does not require `sudo`. The resulting RPM can be installed with your system's standard package management tools.
 
-If you run the whole script with `sudo ./build_rpm.sh`, it will execute as root and no further password prompts will occur, but this is not recommended because files created in the working directory may become owned by root. The script attempts to restore file ownership to the invoking user when possible, but preferring to run it without `sudo` avoids ownership surprises.
+`install_rpm.sh` is only needed if you want more control over the installation or debugging flow. It handles the privileged part: it looks for a ready RPM in the project directory, runs `./build_rpm.sh` if needed, installs the package, updates the desktop database, and verifies that the package and desktop file are present.
 
 ## Why Not a Prebuilt RPM?
 
 To avoid violating the rights of the license holder, the binary in this repository is included only as an example of a successful script run.
 
-The script only automates the conversion of the official package provided by Yandex for your local system.
+The scripts only automate the conversion of the official package provided by Yandex for your local system.
 
 No changes are made to the application source code; only repackaging is performed using the alien tool, including fixing the launcher inside the generated RPM build tree before the package is built.
 
 ## Update
 
-To update the application, run the script again as a regular user: `./build_rpm.sh`.
-If the script needs to perform privileged actions it will prompt for `sudo` credentials as described above.
+Do not start the update process from inside the application itself. When Yandex Music notifies you about a new version, close the program first.
 
+Then either:
+
+1. Run `./build_rpm.sh`, then install the resulting RPM with your regular system tools.
+2. Run `./install_rpm.sh`, which will build the RPM if needed and install it for you.

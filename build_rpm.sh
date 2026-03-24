@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 echo "--- Поиск актуальной версии Яндекс Музыки ---"
 echo "--- Search for the current version of Yandex Music ---"
 
@@ -21,36 +23,6 @@ PACKAGE_NAME=$(basename "$DEB_URL")
 
 echo "Актуальный пакет: $PACKAGE_NAME"
 echo "Current package: $PACKAGE_NAME"
-
-# Determine how to run privileged commands: prefer running the script as regular user
-# and use sudo only for commands that require root. If the script was invoked via
-# sudo, SUDO_UID/SUDO_GID will be set and we'll restore ownership at the end.
-if [ "$(id -u)" -eq 0 ]; then
-    if [ -n "$SUDO_UID" ]; then
-        SUDO_PREFIX=""
-        ORIGINAL_UID="$SUDO_UID"
-        ORIGINAL_GID="$SUDO_GID"
-    else
-        echo "Внимание: скрипт запущен как root. Рекомендуется запускать без sudo." >&2
-        SUDO_PREFIX=""
-        ORIGINAL_UID=0
-        ORIGINAL_GID=0
-    fi
-else
-    SUDO_PREFIX="sudo"
-    ORIGINAL_UID=$(id -u)
-    ORIGINAL_GID=$(id -g)
-fi
-
-# If we will use sudo for privileged commands, request credentials once to cache them
-# so the script won't prompt for a password at each privileged command.
-if [ "${SUDO_PREFIX}" = "sudo" ]; then
-    echo "Запрашиваю sudo для кеширования пароля перед выполнением привилегированных команд..."
-    if ! sudo -v; then
-        echo "Не удалось получить sudo права" >&2
-        exit 1
-    fi
-fi
 
 # 1. Download (save as is)
 # 1. Скачивание (сохраняем как есть)
@@ -167,32 +139,10 @@ if [ -z "$RPM_FILE" ] || [ ! -f "$RPM_FILE" ]; then
 fi
 
 if [ -f "$RPM_FILE" ]; then
-    echo "--- Установка/Обновление пакета $RPM_FILE ---"
-    echo "--- Installation/Updating the $RPM_FILE package ---"
-    # dnf install для локального файла работает и как установка, и как обновление
-    ${SUDO_PREFIX} dnf install -y "$RPM_FILE"
-
-    # Updating the desktop file database so that the changes catch up immediately
-    # Обновляем базу десктоп-файлов, чтобы изменения подтянулись сразу
-    ${SUDO_PREFIX} update-desktop-database
-
-    echo "--- Всё готово! Приложение обновлено и настроено. ---"
-    echo "--- Everything is ready! The app has been updated and configured. ---"
+    echo "--- RPM package created: $RPM_FILE ---"
+    echo "--- RPM пакет собран: $RPM_FILE ---"
 else
     echo "Ошибка: RPM файл не найден. Проверьте вывод сборки выше."
     echo "Error: RPM file not found. Check the build output above."
     exit 1
-fi
-
-# regain ownership to the original (non-root) user if script ran under sudo
-# возвращаем владельца оригинальному (не-root) пользователю, если скрипт запускался через sudo
-# If the script was run via sudo, restore ownership of files in the current
-# directory back to the original user who invoked sudo.
-if [ -n "$SUDO_UID" ]; then
-    chown -R "${SUDO_UID}:${SUDO_GID}" .
-elif [ "$(id -u)" -eq 0 ] && [ "$ORIGINAL_UID" -ne 0 ]; then
-    chown -R "${ORIGINAL_UID}:${ORIGINAL_GID}" .
-else
-    # No action: script wasn't run via sudo, or original user unknown.
-    true
 fi
