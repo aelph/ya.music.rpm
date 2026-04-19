@@ -30,9 +30,10 @@ No changes are made to the application source code; only repackaging is performe
 
 ## Update
 
-Do not start the update process from inside the application itself. When Yandex Music notifies you about a new version, close the program first.
+Do not use the built-in in-app updater flow for RPM. Use the external updater flow:
 
-Then either:
+1. Run `yandexmusic-rpm-update` (installed into `/usr/bin`) and approve the privilege prompt.
+2. Or run `./install_rpm.sh` manually from this repository for the same flow.
+3. Or run `./build_rpm.sh` and install the resulting RPM with regular system tools.
 
-1. Run `./build_rpm.sh`, then install the resulting RPM with your regular system tools.
-2. Run `./install_rpm.sh`, which will build the RPM if needed and install it for you.
+`yandexmusic-rpm-update` calls `/opt/Яндекс Музыка/updater/install_rpm.sh`, which rebuilds RPM from the latest `.deb` in a temporary directory and installs it.
