@@ -43,6 +43,7 @@ yarn-error.log
 .idea/
 *.sublime-project
 *.sublime-workspace
+.codex
 
 # Editor temporary files
 *~
