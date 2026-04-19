@@ -178,14 +178,14 @@ UPDATER_DIR="$ALIEN_DIR/opt/Яндекс Музыка/updater"
 mkdir -p "$UPDATER_DIR"
 cp -f "$SCRIPT_DIR/build_rpm.sh" "$UPDATER_DIR/build_rpm.sh"
 cp -f "$SCRIPT_DIR/install_rpm.sh" "$UPDATER_DIR/install_rpm.sh"
-chmod 0755 "$UPDATER_DIR/build_rpm.sh" "$UPDATER_DIR/install_rpm.sh"
+cp -f "$SCRIPT_DIR/gui_wrapper.sh" "$UPDATER_DIR/gui_wrapper.sh"
+chmod 0755 "$UPDATER_DIR/build_rpm.sh" "$UPDATER_DIR/install_rpm.sh" "$UPDATER_DIR/gui_wrapper.sh"
 
 WRAPPER_BIN="$ALIEN_DIR/usr/bin/yandexmusic-rpm-update"
 mkdir -p "$(dirname "$WRAPPER_BIN")"
 cat <<'EOF_WRAPPER' > "$WRAPPER_BIN"
 #!/bin/bash
-set -euo pipefail
-exec pkexec --disable-internal-agent /bin/bash -c '"/opt/Яндекс Музыка/updater/install_rpm.sh" "$@"' _ "$@"
+exec "/opt/Яндекс Музыка/updater/gui_wrapper.sh" "$@"
 EOF_WRAPPER
 chmod 0755 "$WRAPPER_BIN"
 
@@ -194,6 +194,7 @@ if ! grep -Fq '"/opt/Яндекс Музыка/updater/install_rpm.sh"' "$SPEC_F
 %dir "/opt/Яндекс Музыка/updater/"
 "/opt/Яндекс Музыка/updater/build_rpm.sh"
 "/opt/Яндекс Музыка/updater/install_rpm.sh"
+"/opt/Яндекс Музыка/updater/gui_wrapper.sh"
 "/usr/bin/yandexmusic-rpm-update"
 EOF_SPEC
 fi
